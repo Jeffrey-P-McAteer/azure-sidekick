@@ -66,9 +66,6 @@ RemainAfterExit=yes
 WantedBy=multi-user.target
 EOF
 
-echo "[Install]
-WantedBy=multi-user.target" > build/archiso/releng/airootfs/etc/systemd/system/auto-install.service
-
 if [[ -L build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service ]] ; then
   rm build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service
 fi
