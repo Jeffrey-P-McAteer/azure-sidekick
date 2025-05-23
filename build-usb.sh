@@ -52,8 +52,6 @@ cp ./os-config.json build/archiso/releng/airootfs/os-config.json
 cat <<'EOF' > build/archiso/releng/airootfs/etc/systemd/system/auto-install.service
 [Unit]
 Description=Auto run archinstall
-After=network-online.target
-Wants=network-online.target
 
 [Service]
 Type=oneshot
