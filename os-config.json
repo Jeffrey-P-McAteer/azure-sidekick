@@ -1,0 +1,101 @@
+{
+  "archinstall-language": "English",
+  "bootloader": "Systemd-boot",
+  "debug": false,
+  "disk_config": {
+    "config_type": "default_layout",
+    "device_modifications": [
+      {
+        "device": "/dev/nvme0n1",
+        "partitions": [
+          {
+            "btrfs": [],
+            "flags": [
+              "boot"
+            ],
+            "fs_type": "fat32",
+            "size": {
+              "sector_size": null,
+              "unit": "MiB",
+              "value": 512
+            },
+            "mount_options": [],
+            "mountpoint": "/boot",
+            "obj_id": "2c3fa2d5-2c79-4fab-86ec-22d0ea1543c0",
+            "start": {
+              "sector_size": null,
+              "unit": "MiB",
+              "value": 1
+            },
+            "status": "create",
+            "type": "primary"
+          },
+          {
+            "btrfs": [],
+            "flags": [],
+            "fs_type": "xfs",
+            "size": {
+              "sector_size": null,
+              "unit": "Percent",
+              "value": 100
+            },
+            "mount_options": [],
+            "mountpoint": "/",
+            "obj_id": "ce58b139-f041-4a06-94da-1f8bad775d3f",
+            "start": {
+              "sector_size": null,
+              "unit": "MiB",
+              "value": 524
+            },
+            "status": "create",
+            "type": "primary"
+          }
+        ],
+        "wipe": true
+      }
+    ]
+  },
+  "hostname": "azure-sidekick",
+  "kernels": [
+    "linux"
+  ],
+  "locale_config": {
+    "kb_layout": "us",
+    "sys_enc": "UTF-8",
+    "sys_lang": "en_US"
+  },
+  "mirror_config": {
+    "custom_servers": [
+      {
+        "url": "https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch"
+      },
+      {
+        "url": "http://mirror.arizona.edu/archlinux/$repo/os/$arch"
+      },
+      {
+        "url": "https://mirror.rackspace.com/archlinux/$repo/os/$arch"
+      }
+    ],
+  },
+  "network_config": {
+    "type": "iso"
+  },
+  "no_pkg_lookups": false,
+  "ntp": true,
+  "offline": false,
+  "packages": [
+    "base", "base-devel", "linux",
+    "iw", "wpa_supplicant",
+    "vim", "git", "sudo",
+    "openssh", "rustup",
+  ],
+  "parallel downloads": 0,
+  "script": "guided",
+  "silent": false,
+  "swap": false,
+  "timezone": "UTC",
+  "version": "2.8.6",
+  "post_installation_commands": [
+    "cp /auto-wifi.sh /mnt/auto-wifi.sh"
+  ]
+}

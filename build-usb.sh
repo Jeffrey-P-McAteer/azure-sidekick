@@ -2,59 +2,141 @@
 
 set -e
 
-download_guix_to() {
-  to_folder="$1"
-  if [ -z "$to_folder" ] ; then
-    echo "Error $to_folder does not exist!"
+cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")"
+
+if ! [ -e /usr/share/archiso/configs/releng/ ] ; then
+  sudo pacman -S archiso
+fi
+
+device_to_write_to="$1"
+if [[ -z "$device_to_write_to" ]] ; then
+  echo "No disk passed as argument, select a disk to write to."
+  lsblk -dno NAME,SIZE,TYPE | awk '$3=="disk" {print $1,$2}' | sed -e 's/^/\/dev\//'
+  read -p "Disk: " device_to_write_to
+  if [[ -z "$device_to_write_to" ]] ; then
+    echo "No disk selected, exiting..."
     exit 1
   fi
-  current_bin_url=$(curl -L https://guix.gnu.org/en/download | grep -oP 'href="[^"]+"' | sed 's/href="//;s/"$//' | grep 'guix-binary' | grep 'x86.64' | grep -v sig)
-  echo "current_bin_url = $current_bin_url"
-  wget -c -O "$to_folder/guix-binary-x86_64-linux.tar.xz" "$current_bin_url"
-  tar --extract --verbose --file="$to_folder/guix-binary-x86_64-linux.tar.xz" --directory="$to_folder" --strip-components=0
+  if ! [[ -e "$device_to_write_to" ]] ; then
+    echo "$device_to_write_to does not exist! exiting..."
+    exit 1
+  fi
+fi
+
+echo "device_to_write_to=$device_to_write_to"
+
+mkdir -p build
+mkdir -p build/archiso
+
+cp -r /usr/share/archiso/configs/releng/ build/archiso
+
+cat <<'EOF' > build/archiso/releng/airootfs/auto-install.sh
+#!/bin/bash
+
+set -e
+
+/auto-wifi.sh
+
+archinstall --config /os-config.json
+
+sync
+
+shutdown now
+
+EOF
+
+chmod +x build/archiso/releng/airootfs/auto-install.sh
+
+cp ./os-config.json build/archiso/releng/airootfs/os-config.json
+
+cat <<'EOF' > build/archiso/releng/airootfs/etc/systemd/system/auto-install.service
+[Unit]
+Description=Auto run archinstall
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/auto-install.sh
+StandardOutput=journal
+StandardError=journal
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo "[Install]
+WantedBy=multi-user.target" > build/archiso/releng/airootfs/etc/systemd/system/auto-install.service
+
+if [[ -L build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service ]] ; then
+  rm build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service
+fi
+ln -s /etc/systemd/system/auto-install.service build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service
+
+
+cat <<'EOF' > build/archiso/releng/airootfs/auto-wifi.sh
+#!/bin/bash
+
+wifi_dev=$(iw dev | awk '$1=="Interface"{print $2; exit}')
+if ! [[ -z "$wifi_dev" ]] ; then
+  wpa_supplicant -B -i $wifi_dev -c <(echo -e 'network={\n ssid="MacHome 2.4ghz"\n key_mgmt=NONE\n}')
+
+  dhclient $wifi_dev &
+  dhcpcd $wifi_dev &
+
+  sleep 1
+fi
+
+if [ -z "$ETH_DEV" ]; then
+  ETH_DEV=$(ip a | grep ': enp' | tail -1 | cut -d':' -f2 | tr -d '[:space:]')
+fi
+echo "ETH_DEV=$ETH_DEV"
+
+if ! ( ip address | grep -q 169.254.100.20 ) ; then
+  ip address add 169.254.100.20/16 broadcast + dev $ETH_DEV
+fi
+
+EOF
+
+
+
+append_line_if_not_exists() {
+  if ! grep -q "$1" "$2" ; then
+    echo "$1" >> "$2"
+  fi
 }
 
-bin_path() {
-  find "$GUIX_PROFILE" -type f -path '*bin*' -name "$1" | head -n 1
-}
+append_line_if_not_exists "archinstall" build/archiso/releng/packages.x86_64
+append_line_if_not_exists "networkmanager" build/archiso/releng/packages.x86_64
+append_line_if_not_exists "wpa_supplicant" build/archiso/releng/packages.x86_64
+append_line_if_not_exists "iw" build/archiso/releng/packages.x86_64
+append_line_if_not_exists "sudo" build/archiso/releng/packages.x86_64
+append_line_if_not_exists "iw" build/archiso/releng/packages.x86_64
 
-GUIX_PROFILE=/opt/guix
-if ! [[ -e "$GUIX_PROFILE" ]]; then
-  echo "Error, create $GUIX_PROFILE and give us ownership!"
+sudo mkarchiso -v build/archiso/releng
+
+sync
+sleep 1
+
+sudo find . -maxdepth 3 -iname '*.iso'
+
+iso_to_write=$(sudo find . -maxdepth 3 -iname '*.iso' | head -n 1)
+
+echo "About to write $iso_to_write to $device_to_write_to"
+read -p 'Continue?' yn
+
+if ! grep -q -i y <<<"$yn" >/dev/null 2>&1 ; then
+  echo "Aborting..."
   exit 1
 fi
 
-export PATH="$GUIX_PROFILE/bin":"$PATH"
+echo sudo dd bs=4M if="$iso_to_write" of="$device_to_write_to" conv=fsync oflag=direct status=progress
+sudo dd bs=4M if="$iso_to_write" of="$device_to_write_to" conv=fsync oflag=direct status=progress
 
-if ! which guix >/dev/null 2>&1 ; then
-  #maybe_dir=$(dirname "$(bin_path 'guix')" )
-  #if ! [[ -z "$maybe_dir" ]] && [[ -e "$maybe_dir" ]] ; then
-  #  export PATH="$PATH":"$maybe_dir"
-  #fi
-  export PATH="$PATH":$(find "$GUIX_PROFILE/gnu/store" -maxdepth 2 -type d -name bin | tr '\n' ':')
-fi
-if ! which guix >/dev/null 2>&1 ; then
-  download_guix_to "$GUIX_PROFILE"
-fi
+sync
+sleep 1
 
-export INFOPATH="$GUIX_PROFILE/share/info:$INFOPATH"
-export GUIX_LOCPATH="$GUIX_PROFILE/lib/locale"
+echo "Done!"
 
-guix_interp=$(find "$GUIX_PROFILE" -name 'ld-linux-x86-64.so.2' | head -n 1)
-echo "guix_interp=$guix_interp"
-guix_libs=$(find "$GUIX_PROFILE/gnu/store" -maxdepth 2 -type d -name lib | tr '\n' ':')
-
-if ! pgrep guix-daemon >/dev/null 2>&1 ; then
-  # Start it
-  our_group=$(groups | awk '{print $1}')
-  sudo systemd-run \
-    --unit=guix-daemon --property=BindPaths="$GUIX_PROFILE/var/guix":/var/guix --wait \
-    "$guix_interp" --library-path "$guix_libs" $(bin_path guix-daemon) --build-users-group="$our_group" --disable-chroot &
-fi
-
-
-# Debugging
-export guix_interp="$guix_interp"
-export guix_libs="$guix_libs"
-"$guix_interp" --library-path "$guix_libs" $(bin_path bash)
 
