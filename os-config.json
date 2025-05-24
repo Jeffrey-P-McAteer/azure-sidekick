@@ -87,7 +87,7 @@
     "base", "base-devel", "linux",
     "iw", "wpa_supplicant",
     "vim", "git", "sudo",
-    "openssh", "rustup",
+    "openssh", "rustup"
   ],
   "parallel downloads": 0,
   "script": "guided",
