@@ -297,6 +297,11 @@ cp /auto-wifi.sh /mnt/auto-wifi.sh
 cp /etc/systemd/system/auto-wifi.service /mnt/etc/systemd/system/auto-wifi.service
 ln -s /etc/systemd/system/auto-wifi.service /mnt/etc/systemd/system/multi-user.target.wants/auto-wifi.service
 
+cp /auto-install-2.sh /mnt/auto-install-2.sh
+chmod +x /mnt/auto-install-2.sh
+
+arch-chroot /mnt /usr/bin/bash /auto-install-2.sh
+
 # Make sure changes go to disk
 sync
 
