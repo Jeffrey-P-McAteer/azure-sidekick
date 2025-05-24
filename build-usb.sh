@@ -94,6 +94,9 @@ fi
 if [ -z "$ETH_DEV" ]; then
   ETH_DEV=$(ip a | grep ': enp' | tail -1 | cut -d':' -f2 | tr -d '[:space:]')
 fi
+if [ -z "$ETH_DEV" ]; then
+  ETH_DEV=$(ip a | grep ': ens' | tail -1 | cut -d':' -f2 | tr -d '[:space:]')
+fi
 echo "ETH_DEV=$ETH_DEV"
 
 if ! ( ip address | grep -q 169.254.100.20 ) ; then
