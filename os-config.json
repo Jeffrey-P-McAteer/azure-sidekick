@@ -75,7 +75,7 @@
       {
         "url": "https://mirror.rackspace.com/archlinux/$repo/os/$arch"
       }
-    ],
+    ]
   },
   "network_config": {
     "type": "iso"
