@@ -37,6 +37,18 @@ cat <<'EOF' > build/archiso/releng/airootfs/auto-install.sh
 
 set -e
 
+if ! [[ -e /tmp/auto-install-has-begun ]] ; then
+  touch /tmp/auto-install-has-begun
+else
+  read -p 'auto-install faulted; start bash instead? y/n ' yn
+  if grep -q y <<<"$yn" ; then
+    exec bash
+  else
+    echo 'Continuing...'
+    sleep 1
+  fi
+fi
+
 chmod +x /auto-wifi.sh
 /auto-wifi.sh
 
@@ -75,8 +87,8 @@ EOF
 if [[ -L build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service ]] ; then
   rm build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service
 fi
-ln -s /etc/systemd/system/auto-install.service build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service
-
+# ln -s /etc/systemd/system/auto-install.service build/archiso/releng/airootfs/etc/systemd/system/multi-user.target.wants/auto-install.service
+# we now use getty1 override to do this!
 
 cat <<'EOF' > build/archiso/releng/airootfs/auto-wifi.sh
 #!/bin/bash
@@ -120,6 +132,15 @@ RemainAfterExit=yes
 WantedBy=multi-user.target
 EOF
 
+mkdir -p 'build/archiso/releng/airootfs/etc/systemd/system/getty@tty1.service.d'
+cat <<'EOF' > 'build/archiso/releng/airootfs/etc/systemd/system/getty@tty1.service.d/override.conf'
+[Service]
+ExecStart=
+ExecStart=/usr/bin/bash /auto-install.sh
+StandardInput=tty
+StandardOutput=tty
+Restart=always
+EOF
 
 append_line_if_not_exists() {
   if ! grep -q "$1" "$2" ; then
