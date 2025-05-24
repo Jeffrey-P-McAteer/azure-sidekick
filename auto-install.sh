@@ -65,10 +65,10 @@ INSTALL_DEVICE=$INSTALL_DEVICE
 EOF
 
 read -p 'About to remove partition table, continue? ' yn
-if ! grep -q y <<<"$yn" ; then
-  echo 'Exiting...'
-  exit 1
-fi
+# if ! grep -q y <<<"$yn" ; then
+#   echo 'Exiting...'
+#   exit 1
+# fi
 
 # for second runs this undoes what we did before
 umount "$INSTALL_DEVICE"* || true
@@ -123,12 +123,12 @@ ROOT_PARTITION=$ROOT_PARTITION
 
 EOF
 
-yn=''
-read -p 'Does this look right, continue? ' yn
-if ! grep -q y <<<"$yn" ; then
-  echo 'Exiting...'
-  exit 1
-fi
+#yn=''
+#read -p 'Does this look right, continue? ' yn
+#if ! grep -q y <<<"$yn" ; then
+#  echo 'Exiting...'
+#  exit 1
+#fi
 
 echo 'Creating filesystems on partitions...'
 
