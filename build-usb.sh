@@ -58,7 +58,7 @@ Description=Auto run archinstall
 
 [Service]
 Type=oneshot
-ExecStart=/auto-install.sh
+ExecStart=/usr/bin/bash /auto-install.sh
 StandardOutput=journal
 StandardError=journal
 RemainAfterExit=yes
@@ -97,6 +97,20 @@ fi
 
 EOF
 
+cat <<'EOF' > build/archiso/releng/airootfs/etc/systemd/system/auto-wifi.service
+[Unit]
+Description=Connect to WiFi
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /auto-wifi.sh
+StandardOutput=journal
+StandardError=journal
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
 
 
 append_line_if_not_exists() {

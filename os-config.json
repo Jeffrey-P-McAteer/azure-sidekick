@@ -96,6 +96,8 @@
   "timezone": "UTC",
   "version": "2.8.6",
   "post_installation_commands": [
-    "cp /auto-wifi.sh /mnt/auto-wifi.sh"
+    "cp /auto-wifi.sh /mnt/auto-wifi.sh",
+    "cp /etc/systemd/system/auto-wifi.service /mnt/etc/systemd/system/auto-wifi.service",
+    "ln -s /etc/systemd/system/auto-wifi.service /mnt/etc/systemd/system/multi-user.target.wants/auto-wifi.service"
   ]
 }
