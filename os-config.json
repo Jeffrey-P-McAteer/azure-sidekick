@@ -91,10 +91,22 @@
   ],
   "parallel downloads": 0,
   "script": "guided",
-  "silent": false,
+  "silent": true,
   "swap": false,
   "timezone": "UTC",
   "version": "2.8.6",
+  "user_configuration": {
+    "root-password": {
+      "password": "S1deK1ck"
+    },
+    "user": {
+      "username": "user",
+      "password": "S1deK1ck",
+      "sudo": true,
+      "shell": "/bin/bash",
+      "groups": ["wheel"]
+    }
+  },
   "post_installation_commands": [
     "cp /auto-wifi.sh /mnt/auto-wifi.sh",
     "cp /etc/systemd/system/auto-wifi.service /mnt/etc/systemd/system/auto-wifi.service",
