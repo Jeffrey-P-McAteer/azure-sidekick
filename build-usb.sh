@@ -134,6 +134,13 @@ append_line_if_not_exists "iw" build/archiso/releng/packages.x86_64
 append_line_if_not_exists "sudo" build/archiso/releng/packages.x86_64
 append_line_if_not_exists "iw" build/archiso/releng/packages.x86_64
 
+if [[ -e work ]] ; then
+  sudo rm -rf work
+fi
+if [[ -e out ]] ; then
+  sudo rm -rf out
+fi
+
 sudo mkarchiso -v build/archiso/releng
 
 sync
