@@ -331,7 +331,7 @@ EOF
 sudo -u user sh -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y" || true
 
 # Install zig
-yay -S zig
+yay -S --noconfirm --answerdiff=None zig
 
 # Config stuff
 sudo -u user git config --global core.preloadIndex true || true
