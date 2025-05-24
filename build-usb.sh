@@ -38,8 +38,6 @@ cp -r /usr/share/archiso/configs/releng/ build/archiso
 cp auto-install.sh build/archiso/releng/airootfs/auto-install.sh
 chmod +x build/archiso/releng/airootfs/auto-install.sh
 
-cp ./os-config.json build/archiso/releng/airootfs/os-config.json
-
 cat <<'EOF' > build/archiso/releng/airootfs/etc/systemd/system/auto-install.service
 [Unit]
 Description=Auto run archinstall
@@ -138,7 +136,7 @@ export MAKEFLAGS="-j8"
 sudo -E mkarchiso \
   -A 'Azure-Sidekick' \
   -L 'Azure-Sidekick' \
-  -P 'jeffrey mcateer <jeffrey-bots@jmcateer.pw>' \ \
+  -P 'jeffrey mcateer <jeffrey-bots@jmcateer.pw>' \
   -v build/archiso/releng
 
 sync
