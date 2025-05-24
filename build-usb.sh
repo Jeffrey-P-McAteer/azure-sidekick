@@ -38,6 +38,10 @@ cp -r /usr/share/archiso/configs/releng/ build/archiso
 cp auto-install.sh build/archiso/releng/airootfs/auto-install.sh
 chmod +x build/archiso/releng/airootfs/auto-install.sh
 
+cp auto-install.sh build/archiso/releng/airootfs/auto-install-2.sh
+chmod +x build/archiso/releng/airootfs/auto-install-2.sh
+
+
 cat <<'EOF' > build/archiso/releng/airootfs/etc/systemd/system/auto-install.service
 [Unit]
 Description=Auto run archinstall
