@@ -35,39 +35,7 @@ mkdir -p build/archiso
 
 cp -r /usr/share/archiso/configs/releng/ build/archiso
 
-cat <<'EOF' > build/archiso/releng/airootfs/auto-install.sh
-#!/bin/bash
-
-set -e
-
-if ! [[ -e /tmp/auto-install-has-begun ]] ; then
-  touch /tmp/auto-install-has-begun
-else
-  read -p 'auto-install faulted; start bash instead? y/n ' yn
-  if grep -q y <<<"$yn" ; then
-    exec bash
-  else
-    echo 'Continuing...'
-    sleep 1
-  fi
-fi
-
-chmod +x /auto-wifi.sh
-/auto-wifi.sh
-
-touch /tmp/will-shutdown
-
-archinstall --config /os-config.json
-
-sync
-
-sleep 4
-if [[ -e /tmp/will-shutdown ]] ; then
-  shutdown now
-fi
-
-EOF
-
+cp auto-install.sh build/archiso/releng/airootfs/auto-install.sh
 chmod +x build/archiso/releng/airootfs/auto-install.sh
 
 cp ./os-config.json build/archiso/releng/airootfs/os-config.json
@@ -167,7 +135,11 @@ fi
 
 export XZ_OPT="-T8"
 export MAKEFLAGS="-j8"
-sudo -E mkarchiso -v build/archiso/releng
+sudo -E mkarchiso \
+  -A 'Azure-Sidekick' \
+  -L 'Azure-Sidekick' \
+  -P 'jeffrey mcateer <jeffrey-bots@jmcateer.pw>' \ \
+  -v build/archiso/releng
 
 sync
 sleep 1
