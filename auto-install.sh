@@ -64,7 +64,7 @@ INSTALL_DEVICE=$INSTALL_DEVICE
 
 EOF
 
-read -p 'About to remove partition table, continue? ' yn
+#read -p 'About to remove partition table, continue? ' yn
 # if ! grep -q y <<<"$yn" ; then
 #   echo 'Exiting...'
 #   exit 1
