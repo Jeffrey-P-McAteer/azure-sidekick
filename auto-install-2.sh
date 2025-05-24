@@ -193,7 +193,7 @@ pacman -S --noconfirm base-devel git
   git clone https://aur.archlinux.org/yay-git.git
   chown -R user:user yay-git
   cd /opt/yay-git
-  sudo -u user makepkg -si
+  sudo -u user makepkg -si --noconfirm
 )
 
 
