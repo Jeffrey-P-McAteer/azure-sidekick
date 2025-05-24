@@ -15,6 +15,7 @@
             ],
             "fs_type": "fat32",
             "size": {
+              "sector_size": null,
               "unit": "MiB",
               "value": 512
             },
@@ -22,6 +23,7 @@
             "mountpoint": "/boot",
             "obj_id": "2c3fa2d5-2c79-4fab-86ec-22d0ea1543c0",
             "start": {
+              "sector_size": null,
               "unit": "MiB",
               "value": 1
             },
@@ -33,6 +35,7 @@
             "flags": [],
             "fs_type": "xfs",
             "size": {
+              "sector_size": null,
               "unit": "Percent",
               "value": 100
             },
@@ -40,6 +43,7 @@
             "mountpoint": "/",
             "obj_id": "ce58b139-f041-4a06-94da-1f8bad775d3f",
             "start": {
+              "sector_size": null,
               "unit": "MiB",
               "value": 524
             },
