@@ -334,7 +334,7 @@ sudo -u user sh -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | 
 yay -S zig
 
 # Config stuff
-sudo -u user git config --global core.preloadIndex true
+sudo -u user git config --global core.preloadIndex true || true
 
 # Add user to useful groups
 added_groups=(
