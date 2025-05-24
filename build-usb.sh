@@ -40,11 +40,16 @@ set -e
 chmod +x /auto-wifi.sh
 /auto-wifi.sh
 
+touch /tmp/will-shutdown
+
 archinstall --config /os-config.json
 
 sync
 
-shutdown now
+sleep 4
+if [[ -e /tmp/will-shutdown ]] ; then
+  shutdown now
+fi
 
 EOF
 
