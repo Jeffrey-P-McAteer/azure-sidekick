@@ -37,6 +37,7 @@ cat <<'EOF' > build/archiso/releng/airootfs/auto-install.sh
 
 set -e
 
+chmod +x /auto-wifi.sh
 /auto-wifi.sh
 
 archinstall --config /os-config.json
