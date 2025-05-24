@@ -38,7 +38,7 @@ cp -r /usr/share/archiso/configs/releng/ build/archiso
 cp auto-install.sh build/archiso/releng/airootfs/auto-install.sh
 chmod +x build/archiso/releng/airootfs/auto-install.sh
 
-cp auto-install.sh build/archiso/releng/airootfs/auto-install-2.sh
+cp auto-install-2.sh build/archiso/releng/airootfs/auto-install-2.sh
 chmod +x build/archiso/releng/airootfs/auto-install-2.sh
 
 
