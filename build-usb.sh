@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Test with
+#    qemu-system-x86_64 -boot d -cdrom ./out/archlinux-2025.05.24-x86_64.iso -drive file=/mnt/scratch/vms/test-disk.qcow2,format=qcow2 -m 4096 -enable-kvm
+
 set -e
 
 cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")"
@@ -162,7 +165,9 @@ if [[ -e out ]] ; then
   sudo rm -rf out
 fi
 
-sudo mkarchiso -v build/archiso/releng
+export XZ_OPT="-T8"
+export MAKEFLAGS="-j8"
+sudo -E mkarchiso -v build/archiso/releng
 
 sync
 sleep 1
