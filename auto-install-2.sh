@@ -210,6 +210,8 @@ sidekick_packages=(
   i915-firmware
   util-linux
 
+  wpa_supplicant dhcpcd
+
   ## terminals
   zsh oh-my-zsh-git
 
