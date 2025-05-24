@@ -25,6 +25,8 @@ fi
 
 echo "device_to_write_to=$device_to_write_to"
 
+sudo umount /j/bins/azure-sidekick/work/x86_64/airootfs/proc || true
+
 mkdir -p build
 mkdir -p build/archiso
 
