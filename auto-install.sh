@@ -140,6 +140,7 @@ mkswap $SWAP_PARTITION
 
 mkfs.xfs \
   -L 'Root' \
+  -f \
   $ROOT_PARTITION
 
 
