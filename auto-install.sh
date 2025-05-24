@@ -277,7 +277,7 @@ pacstrap /mnt \
   vim \
   dosfstools \
   btrfs-progs \
-  iw \
+  iw iwd \
   zsh
 
 
