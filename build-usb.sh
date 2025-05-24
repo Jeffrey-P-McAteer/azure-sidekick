@@ -126,7 +126,6 @@ append_line_if_not_exists "networkmanager" build/archiso/releng/packages.x86_64
 append_line_if_not_exists "wpa_supplicant" build/archiso/releng/packages.x86_64
 append_line_if_not_exists "iw" build/archiso/releng/packages.x86_64
 append_line_if_not_exists "sudo" build/archiso/releng/packages.x86_64
-append_line_if_not_exists "iw" build/archiso/releng/packages.x86_64
 
 if [[ -e work ]] ; then
   sudo rm -rf work

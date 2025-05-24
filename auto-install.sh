@@ -17,7 +17,7 @@ else
 fi
 
 chmod +x /auto-wifi.sh
-/auto-wifi.sh
+/auto-wifi.sh || true
 
 touch /tmp/will-shutdown
 
@@ -277,7 +277,7 @@ pacstrap /mnt \
   vim \
   dosfstools \
   btrfs-progs \
-  iwd \
+  iw \
   zsh
 
 
