@@ -96,6 +96,9 @@ Description=Connect to WiFi
 
 [Service]
 Type=oneshot
+ExecStartPre=/usr/bin/sleep 1
+ExecStartPre=/usr/bin/bash /auto-wifi.sh
+ExecStartPre=/usr/bin/sleep 8
 ExecStart=/usr/bin/bash /auto-wifi.sh
 StandardOutput=journal
 StandardError=journal
