@@ -1,0 +1,16 @@
+[Unit]
+Description=Execute runner
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/uv run /runner.py
+StandardOutput=journal
+StandardError=journal
+RemainAfterExit=yes
+Restart=always
+RestartSec=4
+User=user
+WorkingDirectory=/tmp
+
+[Install]
+WantedBy=multi-user.target
