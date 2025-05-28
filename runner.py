@@ -57,7 +57,7 @@ while True:
       if not (file.content.casefold() in processed_content_list):
           processed_content_list.append( file.content.casefold() )
           print(f'Running: {file.content}')
-          reply_content = subprocess.check_output(file.content, shell=True)
+          reply_content = subprocess.check_output(file.content, shell=True, stderr=subprocess.STDOUT)
           if not isinstance(reply_content, str):
             try:
               reply_content = reply_content.decode('utf-8')
