@@ -63,7 +63,7 @@ while True:
               reply_content = reply_content.decode('utf-8')
             except:
               reply_content = traceback.format_exc() + '\n\n' + str(reply_content)
-
+/
           updated_files[filename] = github.InputFileContent(reply_content)
 
           if len(processed_content_list) > 2:
