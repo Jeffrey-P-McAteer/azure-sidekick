@@ -40,6 +40,7 @@ processed_content_list = []
 delay_s = 1
 MAX_DELAY_S = 60
 MIN_DELAY_S = 1
+incremented_last = False
 while True:
   try:
     time.sleep(delay_s)
@@ -75,10 +76,15 @@ while True:
       #gist.edit(description=gist.description, files=updated_files)
       gist.edit(description=gist.description, files=updated_files)
       if delay_s >= MIN_DELAY_S:
-        delay_s /= 2.0 # Cut delay in half
+        delay_s = MIN_DELAY_S # reduce delay to minimum
+        incremented_last = False
     else:
       if delay_s <= MAX_DELAY_S:
-        delay_s *= 2 # no command run, double delay
+        if not incremented_last:
+          delay_s *= 2 # no command run, double delay
+          incremented_last = True
+        else:
+          incremented_last = False # cut increment velocity in half!
 
     time.sleep(delay_s / 10.0)
 
