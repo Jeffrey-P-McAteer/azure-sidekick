@@ -37,9 +37,13 @@ GIST_ID = '68bf8cc2661de2dfb484ab417c0f17b7'
 g = None
 gist = None
 processed_content_list = []
+delay_s = 1
+MAX_DELAY_S = 60
+MIN_DELAY_S = 1
 while True:
   try:
-    time.sleep(1)
+    time.sleep(delay_s)
+    print(f'time.sleep({delay_s})')
 
     if g is None:
       g = github.Github(token)
@@ -70,13 +74,18 @@ while True:
     if len(updated_files) > 0:
       #gist.edit(description=gist.description, files=updated_files)
       gist.edit(description=gist.description, files=updated_files)
+      if delay_s >= MIN_DELAY_S:
+        delay_s /= 2.0 # Cut delay in half
+    else:
+      if delay_s <= MAX_DELAY_S:
+        delay_s *= 2 # no command run, double delay
 
-    time.sleep(1)
+    time.sleep(delay_s / 10.0)
 
   except:
     traceback.print_exc()
     g = None
     gist = None
-    time.sleep(1)
+    time.sleep(2)
 
 
