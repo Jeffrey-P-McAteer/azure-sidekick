@@ -13,7 +13,7 @@ fi
 
 HOST=169.254.100.20
 #HOST=$(lanipof '00:1e:a6:00:63:22')
-HOST=192.168.5.48
+#HOST=192.168.5.48
 
 echo "HOST=$HOST"
 
