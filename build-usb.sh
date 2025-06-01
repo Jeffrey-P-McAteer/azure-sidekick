@@ -86,6 +86,7 @@ echo "ETH_DEV=$ETH_DEV"
 
 if ! ( ip address | grep -q 169.254.100.20 ) ; then
   ip address add 169.254.100.20/16 broadcast + dev $ETH_DEV
+  ip route add 169.254.0.0/16 dev $ETH_DEV
 fi
 
 EOF
