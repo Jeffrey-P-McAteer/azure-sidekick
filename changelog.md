@@ -50,6 +50,43 @@ ListenStream=169.254.100.20:9090
 
 Management available at `https://169.254.100.20:9090`, `user:S1deK1ck`
 
+`sudo mkdir /mnt/nfs/vm-storage-pool` << added storage pool
+
+
+Create `/etc/systemd/system/periodic-commands.timer`
+
+```
+[Unit]
+Description=Run various commands every 15 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=15min
+Unit=periodic-commands.service
+
+[Install]
+WantedBy=timers.target
+````
+
+
+Create `/etc/systemd/system/periodic-commands.service`
+
+```
+[Unit]
+Description=Run various commands every 15 minutes
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /periodic-commands.sh
+````
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable --now periodic-commands.timer
+```
+
+
+
 
 
 
