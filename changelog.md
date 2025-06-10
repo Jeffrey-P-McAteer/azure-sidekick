@@ -27,7 +27,7 @@ UUID=a39848c6-c24b-4b0e-9960-7900665410b9  /mnt/nfs  xfs    rw,relatime,nofail,g
 
 Setup `cockpit` along with some VM stuff to do VMs from a browser.
 
-`sudo pacman -Syu cockpit cockpit-machines qemu-full virt-manager virt-viewer dnsmasq bridge-utils libvirt`
+`sudo pacman -Syu cockpit cockpit-machines qemu-full virt-manager virt-viewer dnsmasq bridge-utils libvirt swtpm edk2-ovmf`
 
 
 `sudo systemctl enable --now cockpit.socket`
@@ -85,9 +85,30 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now periodic-commands.timer
 ```
 
+For the windows VM particularly:
+
+```
+sudo EDITOR=vim virsh edit Builder-Win11
+# Under <devices> add
+<tpm model='tpm-crb'>
+  <backend type='emulator' version='2.0'/>
+</tpm>
+
+```
 
 
+```
+echo "net.ipv4.ip_forward = 1" | sudo tee /etc/sysctl.d/99-forwarding.conf
+````
 
+```
+sudo EDITOR=vim virsh net-edit default
+Under <network> add/update
 
+<dns>
+  <forwarder addr='127.0.0.53'/>
+</dns>
+
+```
 
 
