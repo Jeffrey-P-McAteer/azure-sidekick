@@ -1,0 +1,56 @@
+
+# 2025-06-01
+
+Setup an NFS share using /dev/sda1 as backing storage w/ an XFS filesystem. Basically a copy-paste of this w/ the azure-* IPs: https://wiki.archlinux.org/title/NFS
+
+`fstab` got a new line:
+
+```
+# /dev/sda1
+UUID=a39848c6-c24b-4b0e-9960-7900665410b9  /mnt/nfs  xfs    rw,relatime,nofail,gid=1000,uid=1000          0 0
+```
+
+`yay -S nfs-utils`
+
+
+`/etc/exports` contains
+
+```
+/mnt/nfs 169.254.100.20/16(rw)
+
+```
+
+`sudo systemctl enable --now nfsv4-server.service`
+
+
+# 2025-06-10
+
+Setup `cockpit` along with some VM stuff to do VMs from a browser.
+
+`sudo pacman -Syu cockpit cockpit-machines qemu-full virt-manager virt-viewer dnsmasq bridge-utils libvirt`
+
+
+`sudo systemctl enable --now cockpit.socket`
+
+`sudo systemctl enable --now libvirtd`
+
+`sudo usermod -aG libvirt $(whoami)`
+
+
+`sudo systemctl edit cockpit.socket`
+
+```
+[Socket]
+# Clear the default ListenStream
+ListenStream=
+
+# Add your specific IP
+ListenStream=169.254.100.20:9090
+```
+
+Management available at `https://169.254.100.20:9090`, `user:S1deK1ck`
+
+
+
+
+
