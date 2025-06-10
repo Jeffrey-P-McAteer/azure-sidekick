@@ -107,6 +107,7 @@ Under <network> add/update
 
 <dns>
   <forwarder addr='127.0.0.53'/>
+  <forwarder addr='1.1.1.1'/>
 </dns>
 
 ```
