@@ -24,10 +24,10 @@ if ! command -v waypipe 2>&1 >/dev/null ; then
   exec ssh \
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
-     user@$HOST
+     user@$HOST "$@"
 else
   exec waypipe ssh \
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
-     user@$HOST
+     user@$HOST "$@"
 fi
