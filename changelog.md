@@ -16,12 +16,17 @@ UUID=a39848c6-c24b-4b0e-9960-7900665410b9  /mnt/nfs  xfs    rw,relatime,nofail,g
 `/etc/exports` contains
 
 ```
-/mnt/nfs 169.254.100.20/16(rw)
+/mnt/nfs 169.254.100.20/16(rw,no_subtree_check,async,no_wdelay,no_root_squash) 192.168.122.1/24(rw,no_subtree_check,async,no_wdelay,no_root_squash)
 
 ```
 
+(`192.168.122.1/24(rw)` added for default KVM VM network)
+
 `sudo systemctl enable --now nfsv4-server.service`
 
+`sudo systemctl enable --now rpcbind.service`
+
+`sudo systemctl enable --now nfs-server.service`
 
 # 2025-06-10
 
@@ -111,5 +116,15 @@ Under <network> add/update
 </dns>
 
 ```
+
+# 2025-06-12
+
+About-face, we'll just add `nfsv3` and friends to our supported clients because that's the easiest way to keep our windows build client attached `-_-`
+
+
+
+
+
+
 
 
