@@ -121,7 +121,27 @@ Under <network> add/update
 
 About-face, we'll just add `nfsv3` and friends to our supported clients because that's the easiest way to keep our windows build client attached `-_-`
 
+TODO
 
+# 2025-06-15
+
+`/periodic-commands.sh`
+
+```bash
+#!/bin/bash
+
+if ! (virsh list | grep -q Builder-Win11) ; then
+  virsh start Builder-Win11
+fi
+
+
+
+virsh setmem Builder-Win11 2048000 --live
+virsh setmem Builder-MacOS 2048000 --live
+
+
+exit 0
+```
 
 
 
