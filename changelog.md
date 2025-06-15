@@ -144,7 +144,13 @@ exit 0
 ```
 
 
+`/etc/modprobe.d/kvm.conf` - update to help macos boots (See https://github.com/kholia/OSX-KVM?tab=readme-ov-file#installation-preparation)
 
-
+```
+cat /etc/modprobe.d/kvm.conf
+# Important for MacOS Guests
+options kvm_amd nested=1
+options kvm ignore_msrs=1 report_ignored_msrs=0
+```
 
 
