@@ -16,7 +16,7 @@ UUID=a39848c6-c24b-4b0e-9960-7900665410b9  /mnt/nfs  xfs    rw,relatime,nofail,g
 `/etc/exports` contains
 
 ```
-/mnt/nfs 169.254.100.20/16(rw,no_subtree_check,async,no_wdelay,no_root_squash) 192.168.122.1/24(rw,no_subtree_check,async,no_wdelay,no_root_squash)
+/mnt/nfs 169.254.100.20/16(rw,no_subtree_check,async,no_wdelay,all_squash,anonuid=1000,anongid=1000) 192.168.122.1/24(rw,no_subtree_check,async,no_wdelay,all_squash,anonuid=1000,anongid=1000)
 
 ```
 
