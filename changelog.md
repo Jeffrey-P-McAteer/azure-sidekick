@@ -153,4 +153,24 @@ options kvm_amd nested=1
 options kvm ignore_msrs=1 report_ignored_msrs=0
 ```
 
+# 2025-06-28
+
+Enabled Wake-On-Lan using systemd persistent config file for etherney by MAC address described here: https://wiki.archlinux.org/title/Wake-on-LAN
+
+Also wrote a dynamic method to ensure wake-on-lan is always enabled even after a suspend-resume cycle:
+
+`/etc/udev/rules.d/70-wol.rules`
+
+```
+ACTION=="add", SUBSYSTEM=="net", KERNEL=="en*", RUN+="/usr/bin/ethtool -s %k wol g"
+```
+
+
+
+
+
+
+
+
+
 
