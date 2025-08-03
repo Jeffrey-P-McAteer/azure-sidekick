@@ -47,7 +47,8 @@ def parse_pattern_to_led_colors(pattern):
 
   return colors
 
-print(f'''Colors:
+if sys.stdin.isatty():
+  print(f'''Colors:
 r - Red
 g - Green
 b - Blue
@@ -59,17 +60,19 @@ w - White
 
 Add a number to set milliseconds for pattern to remain, use a space character to not change the LED at all.
 
-'''.strip())
-print()
+  '''.strip())
+  print()
 
 device = blinkstick.find_first()
 
 BRIGHTNESS = os.environ.get('BRIGHTNESS', '0.25')
 BRIGHTNESS = float(BRIGHTNESS)
-print(f'BRIGHTNESS={BRIGHTNESS}')
+if sys.stdin.isatty():
+  print(f'BRIGHTNESS={BRIGHTNESS}')
 
 for pattern in sys.argv[1:]:
-  print(f'Pattern: {pattern}')
+  if sys.stdin.isatty():
+    print(f'Pattern: {pattern}')
 
   pattern_nums, pattern_chars = ''.join(filter(str.isdigit, pattern)), ''.join(filter(lambda c: not c.isdigit(), pattern))
   if len(pattern_nums) < 1:
