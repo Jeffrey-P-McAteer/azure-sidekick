@@ -38,9 +38,8 @@ def c_to_color(c):
 
 def parse_pattern_to_led_colors(pattern):
   pattern = pattern.casefold()
-  if len(pattern) != 7:
-    print(f'Fatal error, pattern "{pattern}" does not have 7 colors!')
-    sys.exit(1)
+  if len(pattern) > 7:
+    pattern = pattern[:7]
 
   colors = []
   for c in pattern:
