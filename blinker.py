@@ -65,6 +65,10 @@ print()
 
 device = blinkstick.find_first()
 
+BRIGHTNESS = os.environ.get('BRIGHTNESS', '0.25')
+BRIGHTNESS = float(BRIGHTNESS)
+print(f'BRIGHTNESS={BRIGHTNESS}')
+
 for pattern in sys.argv[1:]:
   print(f'Pattern: {pattern}')
 
@@ -78,7 +82,13 @@ for pattern in sys.argv[1:]:
 
   for idx, color in enumerate(parse_pattern_to_led_colors(pattern_chars)):
     if not (color is None):
-      device.morph(index=idx, red=color[0], green=color[1], blue=color[2], duration=int(pattern_ms))
+      device.morph(
+        index=idx,
+        red=int(color[0] * BRIGHTNESS),
+        green=int(color[1] * BRIGHTNESS),
+        blue=int(color[2] * BRIGHTNESS),
+        duration=int(pattern_ms)
+      )
 
   time.sleep(pattern_ms / 1000.0)
 
