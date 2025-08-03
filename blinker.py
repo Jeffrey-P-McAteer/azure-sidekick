@@ -31,13 +31,13 @@ def c_to_color(c):
   elif c == '_':
     return (0, 0, 0)
   elif c == ' ':
-    return (0, 0, 0)
+    return None
   else:
     print(f'WARNING: unknown color "{c}", using white')
     return (255, 255, 255)
 
 def parse_pattern_to_led_colors(pattern):
-  pattern = pattern.strip().casefold()
+  pattern = pattern.casefold()
   if len(pattern) != 7:
     print(f'Fatal error, pattern "{pattern}" does not have 7 colors!')
     sys.exit(1)
@@ -57,17 +57,30 @@ c - Cyan
 m - Magenta
 w - White
 - - OFF
-''')
+
+Add a number to set milliseconds for pattern to remain, use a space character to not change the LED at all.
+
+'''.strip())
+print()
 
 device = blinkstick.find_first()
 
 for pattern in sys.argv[1:]:
   print(f'Pattern: {pattern}')
-  while len(pattern) < 7:
-    pattern += '-'
-  for idx, color in enumerate(parse_pattern_to_led_colors(pattern)):
-    device.set_color(index=idx, red=color[0], green=color[1], blue=color[2])
-  time.sleep(0.5)
+
+  pattern_nums, pattern_chars = ''.join(filter(str.isdigit, pattern)), ''.join(filter(lambda c: not c.isdigit(), pattern))
+  if len(pattern_nums) < 1:
+    pattern_nums = '250'
+  pattern_ms = int(pattern_nums)
+
+  while len(pattern_chars) < 7:
+    pattern_chars += '-'
+
+  for idx, color in enumerate(parse_pattern_to_led_colors(pattern_chars)):
+    if not (color is None):
+      device.morph(index=idx, red=color[0], green=color[1], blue=color[2], duration=int(pattern_ms))
+
+  time.sleep(pattern_ms / 1000.0)
 
 
 
