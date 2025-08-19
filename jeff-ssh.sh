@@ -7,6 +7,11 @@ if [ -z "$ETH_DEV" ]; then
 fi
 echo "ETH_DEV=$ETH_DEV"
 
+if [ -z "$SK_USER" ] ; then
+  SK_USER='jeff'
+fi
+echo "SK_USER=$SK_USER"
+
 # Question one: is ethernet plugged in? If do do LAN ip config, else swap to remote
 if cat "/sys/class/net/$ETH_DEV/carrier" | grep -q '1' ; then
   # Ethernet plugged in
@@ -27,17 +32,23 @@ fi
 echo "HOST=$HOST"
 
 echo "Forwarding 127.0.0.1:9000"
+echo "Forwarding 127.0.0.1:9090"
 
 if ! command -v waypipe 2>&1 >/dev/null ; then
   echo "waypipe not found, running SSH directly"
   exec ssh \
     -i /j/ident/azure_sidekick \
-    -L 127.0.0.1:9000:127.0.0.1:9000 -p $PORT \
-     user@$HOST "$@"
+    -L 127.0.0.1:9000:127.0.0.1:9000 \
+    -L 127.0.0.1:9090:127.0.0.1:9090 \
+    -p $PORT \
+     $SK_USER@$HOST "$@"
 else
   exec waypipe ssh \
     -i /j/ident/azure_sidekick \
-    -L 127.0.0.1:9000:127.0.0.1:9000 -p $PORT \
-     user@$HOST "$@"
+    -L 127.0.0.1:9000:127.0.0.1:9000 \
+    -L 127.0.0.1:9090:127.0.0.1:9090 \
+    -p $PORT \
+     $SK_USER@$HOST "$@"
 fi
+
 
