@@ -26,6 +26,10 @@ if (( file_time < ( current_time - ( 60 * 60 * 24 * 1 ) ) )); then
   su user yay --downloadonly --noconfirm
 fi
 
+# We also manage a physical windows disk which needs to be lit up for 2 hours/day for updates
+# Script keeps it's own state and just needs to be invoked periodically
+/manage-win-ssd.sh
+
 
 exit 0
 
