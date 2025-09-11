@@ -9,6 +9,11 @@ first_win_part=$(realpath "/dev/disk/by-partuuid/$WIN_P1_PARTUUID" 2>/dev/null)
 win_block_device=$(lsblk -no pkname "$first_win_part" 2>/dev/null)
 echo "win_block_device=$win_block_device"
 
+blink() {
+  uv run /blinker.py "      $1" || true
+  uv run /blinker.py "      -" || true # Clear whatever we just set - blink does not leave side-effects
+}
+
 ensure_vm_setup() {
   if [[ -z "$win_block_device" ]] ; then
     echo "win_block_device = $win_block_device, refusing to create VM until disk is plugged in!"
@@ -70,12 +75,14 @@ shutdown_with_force() {
     state=$(sudo virsh domstate "$VM_NAME")
     if [[ "$state" =~ "shut off" ]]; then
         echo "$VM_NAME shut down gracefully."
+        blink y750
         exit 0
     fi
     sleep 1
   done
   echo "$VM_NAME did not shut down in 90s, forcing power off..."
   sudo virsh destroy "$VM_NAME"
+  blink r750
 }
 
 file_age_s() {
@@ -114,6 +121,7 @@ boot_win_ssd() {
     if ! sudo virsh list --state-running | grep -q "$VM_NAME" ; then
       echo "Booting $VM_NAME"
       sudo touch /tmp/.win-ssd-last-boot
+      blink g9000 &
       sudo virsh start "$VM_NAME"
     else
       echo "$VM_NAME is already running, doing nothing."
@@ -144,6 +152,7 @@ else
       if (( AGE > SHUTDOWN_AGE )); then
         # Booted > 2 hours ago, request a graceful shutdown
         sudo virsh shutdown "$VM_NAME"
+        blink y750 &
       fi
     fi
   else
