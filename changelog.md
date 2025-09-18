@@ -166,6 +166,23 @@ ACTION=="add", SUBSYSTEM=="net", KERNEL=="en*", RUN+="/usr/bin/ethtool -s %k wol
 ```
 
 
+# 2025-09-18
+
+Bit the bullet and installed Docker, it's not a great container management system but
+there's a ton of AI software that goes from 50 steps => 5 steps with that runtime.
+
+
+```bash
+yay -S docker
+sudo systemctl enable --now docker.service
+sudo usermod -aG docker $USER
+
+```
+
+Now we can run `/invokeai-container.sh`
+
+
+
 
 
 

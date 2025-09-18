@@ -32,7 +32,8 @@ fi
 echo "HOST=$HOST"
 
 echo "Forwarding 127.0.0.1:9000"
-echo "Forwarding 127.0.0.1:9090"
+echo "Forwarding 127.0.0.1:9090 (cockpit)"
+echo "Forwarding 127.0.0.1:9100 (invokeai)"
 
 if ! command -v waypipe 2>&1 >/dev/null ; then
   echo "waypipe not found, running SSH directly"
@@ -40,6 +41,7 @@ if ! command -v waypipe 2>&1 >/dev/null ; then
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
     -L 127.0.0.1:9090:127.0.0.1:9090 \
+    -L 127.0.0.1:9100:127.0.0.1:9100 \
     -p $PORT \
      $SK_USER@$HOST "$@"
 else
@@ -47,6 +49,7 @@ else
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
     -L 127.0.0.1:9090:127.0.0.1:9090 \
+    -L 127.0.0.1:9100:127.0.0.1:9100 \
     -p $PORT \
      $SK_USER@$HOST "$@"
 fi
