@@ -27,8 +27,8 @@ sudo mkdir -p "$HOST_OUTPUTS"
 sudo mkdir -p "$HOST_CONFIG"
 
 # Docker image (official InvokeAI or community variant)
-IMAGE="ghcr.io/invoke-ai/invokeai:latest"
-#IMAGE="andyhite/invokeai:v6.5.1"
+#IMAGE="ghcr.io/invoke-ai/invokeai:latest"
+IMAGE="ghcr.io/invoke-ai/invokeai:main-cuda"
 
 # Container ephemeral run
 exec sudo docker run --rm -it \
