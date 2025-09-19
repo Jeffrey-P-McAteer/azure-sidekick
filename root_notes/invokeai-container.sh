@@ -20,12 +20,15 @@ fi
 # Host folders (change if you like)
 HOST_MODELS="$AI_FOLDER/models"
 HOST_OUTPUTS="$AI_FOLDER/outputs"
+HOST_CONFIG="$HOST_BASE/config"
 
 sudo mkdir -p "$HOST_MODELS"
 sudo mkdir -p "$HOST_OUTPUTS"
+sudo mkdir -p "$HOST_CONFIG"
 
 # Docker image (official InvokeAI or community variant)
 IMAGE="ghcr.io/invoke-ai/invokeai:latest"
+#IMAGE="andyhite/invokeai:v6.5.1"
 
 # Container ephemeral run
 exec sudo docker run --rm -it \
@@ -33,8 +36,11 @@ exec sudo docker run --rm -it \
   -p 127.0.0.1:9100:9100 \
   -v "$HOST_MODELS:/root/.invokeai/models" \
   -v "$HOST_OUTPUTS:/root/.invokeai/outputs" \
+  -v "$HOST_CONFIG:/root/.invokeai/config" \
   "$IMAGE" \
     --web \
     --port 9100 \
     --model_dir /root/.invokeai/models \
-    --output_dir /root/.invokeai/outputs
+    --output_dir /root/.invokeai/outputs \
+    --config_dir /root/.invokeai/config
+
