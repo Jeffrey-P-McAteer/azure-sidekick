@@ -20,7 +20,7 @@ fi
 # Host folders (change if you like)
 HOST_MODELS="$AI_FOLDER/models"
 HOST_OUTPUTS="$AI_FOLDER/outputs"
-HOST_CONFIG="$HOST_BASE/config"
+HOST_CONFIG="$AI_FOLDER/config"
 
 sudo mkdir -p "$HOST_MODELS"
 sudo mkdir -p "$HOST_OUTPUTS"
@@ -31,17 +31,20 @@ sudo mkdir -p "$HOST_CONFIG"
 IMAGE="ghcr.io/invoke-ai/invokeai:main-cuda"
 
 # Container ephemeral run
-exec sudo docker run --rm -it \
+# exec sudo docker run --rm -it \
+#   --gpus all \
+#   -p 127.0.0.1:9100:9090 \
+#   -v "$HOST_MODELS:/root/.invokeai/models" \
+#   -v "$HOST_OUTPUTS:/root/.invokeai/outputs" \
+#   -v "$HOST_CONFIG:/root/.invokeai/config" \
+#   "$IMAGE" \
+#     /opt/venv/bin/invokeai-web --root /root/.invokeai
+
+echo "ADDTL_DOCKER_ARGS=$ADDTL_DOCKER_ARGS"
+
+exec sudo docker run --rm $ADDTL_DOCKER_ARGS \
   --gpus all \
   -p 127.0.0.1:9100:9090 \
-  -v "$HOST_MODELS:/root/.invokeai/models" \
-  -v "$HOST_OUTPUTS:/root/.invokeai/outputs" \
-  -v "$HOST_CONFIG:/root/.invokeai/config" \
+  -v "$AI_FOLDER:/root/.invokeai" \
   "$IMAGE" \
     /opt/venv/bin/invokeai-web --root /root/.invokeai
-    # /opt/venv/bin/invokeai-web --web \
-    # --port 9100 \
-    # --model_dir /root/.invokeai/models \
-    # --output_dir /root/.invokeai/outputs \
-    # --config_dir /root/.invokeai/config
-
