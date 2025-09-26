@@ -33,14 +33,15 @@ IMAGE="ghcr.io/invoke-ai/invokeai:main-cuda"
 # Container ephemeral run
 exec sudo docker run --rm -it \
   --gpus all \
-  -p 127.0.0.1:9100:9100 \
+  -p 127.0.0.1:9100:9090 \
   -v "$HOST_MODELS:/root/.invokeai/models" \
   -v "$HOST_OUTPUTS:/root/.invokeai/outputs" \
   -v "$HOST_CONFIG:/root/.invokeai/config" \
   "$IMAGE" \
-    --web \
-    --port 9100 \
-    --model_dir /root/.invokeai/models \
-    --output_dir /root/.invokeai/outputs \
-    --config_dir /root/.invokeai/config
+    /opt/venv/bin/invokeai-web --root /root/.invokeai
+    # /opt/venv/bin/invokeai-web --web \
+    # --port 9100 \
+    # --model_dir /root/.invokeai/models \
+    # --output_dir /root/.invokeai/outputs \
+    # --config_dir /root/.invokeai/config
 
