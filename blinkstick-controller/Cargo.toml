@@ -1,0 +1,9 @@
+[package]
+name = "blinkstick-controller"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1", features = ["full"]}
+blinkstick = { git = "https://github.com/ejade/blinkstick-rust.git" }
+
