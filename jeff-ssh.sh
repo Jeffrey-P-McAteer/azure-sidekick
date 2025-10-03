@@ -45,6 +45,7 @@ if ! command -v waypipe 2>&1 >/dev/null ; then
     -p $PORT \
      $SK_USER@$HOST "$@"
 else
+  export WAYPIPE=egl
   exec waypipe ssh \
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
