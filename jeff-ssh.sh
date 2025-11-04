@@ -37,7 +37,7 @@ echo "Forwarding 127.0.0.1:9100 (invokeai)"
 
 if ! command -v waypipe 2>&1 >/dev/null ; then
   echo "waypipe not found, running SSH directly"
-  exec ssh \
+  exec ssh -X \
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
     -L 127.0.0.1:9090:127.0.0.1:9090 \
@@ -45,8 +45,13 @@ if ! command -v waypipe 2>&1 >/dev/null ; then
     -p $PORT \
      $SK_USER@$HOST "$@"
 else
-  export WAYPIPE=egl
-  exec waypipe ssh \
+  echo "Forwarding grapics with waypipe"
+  if [ -z "$WAYPIPE" ] ; then
+    export WAYPIPE=egl
+  fi
+  echo "WAYPIPE=$WAYPIPE"
+  export WAYPIPE=$WAYPIPE
+  exec waypipe ssh -X \
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
     -L 127.0.0.1:9090:127.0.0.1:9090 \
