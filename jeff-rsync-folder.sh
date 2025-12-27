@@ -32,7 +32,10 @@ fi
 echo "HOST=$HOST"
 echo "Syncing local dir '$1' to $HOST dir '$2'"
 
-exec rsync -avz --delete
-  -e "ssh -i /j/ident/azure_sidekick -p $PORT -o IdentitiesOnly=yes" \
-  "$1" \
-  $SK_USER@$HOST:"$2"
+echo rsync -avz --delete \
+  -e "ssh -i /j/ident/azure_sidekick -p $PORT" \
+  "$1" "$SK_USER"@"$HOST":"$2"
+
+exec rsync -avz --delete \
+  -e "ssh -i /j/ident/azure_sidekick -p $PORT" \
+  "$1" "$SK_USER"@"$HOST":"$2"
