@@ -5,12 +5,16 @@ set -e
 if [ -z "$ETH_DEV" ]; then
   ETH_DEV=$(ip a | grep ': enp' | tail -1 | cut -d':' -f2 | tr -d '[:space:]')
 fi
-echo "ETH_DEV=$ETH_DEV"
+if [[ -z "$BE_QUIET" ]] ; then
+  echo "ETH_DEV=$ETH_DEV"
+fi
 
 if [ -z "$SK_USER" ] ; then
   SK_USER='jeff'
 fi
-echo "SK_USER=$SK_USER"
+if [[ -z "$BE_QUIET" ]] ; then
+  echo "SK_USER=$SK_USER"
+fi
 
 # Question one: is ethernet plugged in? If do do LAN ip config, else swap to remote
 if cat "/sys/class/net/$ETH_DEV/carrier" | grep -q '1' ; then
@@ -29,8 +33,10 @@ fi
 #HOST=169.254.100.20
 #HOST=$(lanipof '00:1e:a6:00:63:22')
 
-echo "HOST=$HOST"
-echo "Syncing local dir '$1' to $HOST dir '$2'"
+if [[ -z "$BE_QUIET" ]] ; then
+  echo "HOST=$HOST"
+  echo "Syncing local dir '$1' to $HOST dir '$2'"
+fi
 
 echo rsync -avz --delete \
   -e "ssh -i /j/ident/azure_sidekick -p $PORT" \

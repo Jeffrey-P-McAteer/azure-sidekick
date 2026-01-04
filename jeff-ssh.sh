@@ -5,12 +5,16 @@ set -e
 if [ -z "$ETH_DEV" ]; then
   ETH_DEV=$(ip a | grep ': enp' | tail -1 | cut -d':' -f2 | tr -d '[:space:]')
 fi
-echo "ETH_DEV=$ETH_DEV"
+if [[ -z "$BE_QUIET" ]] ; then
+  echo "ETH_DEV=$ETH_DEV"
+fi
 
 if [ -z "$SK_USER" ] ; then
   SK_USER='jeff'
 fi
-echo "SK_USER=$SK_USER"
+if [[ -z "$BE_QUIET" ]] ; then
+  echo "SK_USER=$SK_USER"
+fi
 
 # Question one: is ethernet plugged in? If do do LAN ip config, else swap to remote
 if cat "/sys/class/net/$ETH_DEV/carrier" | grep -q '1' ; then
@@ -29,14 +33,18 @@ fi
 #HOST=169.254.100.20
 #HOST=$(lanipof '00:1e:a6:00:63:22')
 
-echo "HOST=$HOST"
+if [[ -z "$BE_QUIET" ]] ; then
+  echo "HOST=$HOST"
 
-echo "Forwarding 127.0.0.1:9000"
-echo "Forwarding 127.0.0.1:9090 (cockpit)"
-echo "Forwarding 127.0.0.1:9100 (invokeai)"
+  echo "Forwarding 127.0.0.1:9000"
+  echo "Forwarding 127.0.0.1:9090 (cockpit)"
+  echo "Forwarding 127.0.0.1:9100 (invokeai)"
+fi
 
 if ! command -v waypipe 2>&1 >/dev/null ; then
-  echo "waypipe not found, running SSH directly"
+  if [[ -z "$BE_QUIET" ]] ; then
+    echo "waypipe not found, running SSH directly"
+  fi
   exec ssh -X \
     -i /j/ident/azure_sidekick \
     -L 127.0.0.1:9000:127.0.0.1:9000 \
@@ -45,11 +53,12 @@ if ! command -v waypipe 2>&1 >/dev/null ; then
     -p $PORT \
      $SK_USER@$HOST "$@"
 else
-  echo "Forwarding grapics with waypipe"
+  if [[ -z "$BE_QUIET" ]] ; then
+    echo "Forwarding grapics with waypipe"
+  fi
   if [ -z "$WAYPIPE" ] ; then
     export WAYPIPE=egl
   fi
-  echo "WAYPIPE=$WAYPIPE"
   export WAYPIPE=$WAYPIPE
   exec waypipe ssh -X \
     -i /j/ident/azure_sidekick \
